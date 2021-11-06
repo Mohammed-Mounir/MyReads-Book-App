@@ -40,23 +40,29 @@ class BooksApp extends React.Component {
       const book = booksClone.find((book) => book.id === bookId);
       book.shelf = shelf;
 
-      // Setting the state before calling API
+      // Setting the state before calling API for faster updated UI
       this.setState({ books: booksClone });
 
-      // Calling the API
-      BooksAPI.update(book, shelf)
-        .then((res) => console.log("Updated Successfully!", res))
-        .catch((err) => {
-          console.log("Couldn't Update!", err);
-          // Rolling back changes
-          this.setState({ books: booksCopy });
-        });
+      // Updating
+      this.updateSaveBook(book, shelf, booksCopy);
     } else {
       BooksAPI.get(bookId).then((book) => {
         book.shelf = shelf;
+        // Saving
+        this.updateSaveBook(book, shelf);
         this.setState((prevState) => ({ books: [...prevState.books, book] }));
       });
     }
+  };
+
+  updateSaveBook = (book, shelf, books = []) => {
+    BooksAPI.update(book, shelf)
+      .then((res) => console.log("Updated Successfully!", res))
+      .catch((err) => {
+        console.log("Couldn't Update!", err);
+        // Rolling back changes
+        this.setState({ books: books });
+      });
   };
 
   handleSearch = (evt) => {
