@@ -30,11 +30,28 @@ class BooksApp extends React.Component {
 
   handleSelectChange = (evt, bookID) => {
     const shelf = evt.target.value;
+
+    // Copy of current books array
+    const booksCopy = this.state.books;
+
+    // Deep clone
     const booksClone = this.state.books.map((book) => ({ ...book }));
-    booksClone.find((book) => book.id === bookID).shelf = shelf;
+
+    // Finding the intended book object and changing its shelf property
+    const book = booksClone.find((book) => book.id === bookID);
+    book.shelf = shelf;
+
+    // Setting the state before calling API
     this.setState({ books: booksClone });
-    console.log(bookID, shelf);
-    BooksAPI.update(bookID, shelf).then((data) => console.log(data));
+
+    // Calling the API
+    BooksAPI.update(book, shelf)
+      .then((res) => console.log("Updated Successfully!", res))
+      .catch((err) => {
+        console.log("Couldn't Update!", err);
+        // Rolling back changes
+        this.setState({ books: booksCopy });
+      });
   };
 
   render() {
