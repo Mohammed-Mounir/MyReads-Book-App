@@ -13,9 +13,9 @@ class BooksApp extends React.Component {
      */
     books: [],
     bookShelves: [
-      { id: 1, shelf: "currentlyReading" },
-      { id: 2, shelf: "wantToRead" },
-      { id: 3, shelf: "read" },
+      { shelfKey: "currentlyReading", shelfTitle: "Currently Reading" },
+      { shelfKey: "wantToRead", shelfTitle: "Want to Read" },
+      { shelfKey: "read", shelfTitle: "Read" },
     ],
     showSearchPage: false,
   };
@@ -29,9 +29,12 @@ class BooksApp extends React.Component {
   }
 
   handleSelectChange = (evt, bookID) => {
+    const shelf = evt.target.value;
     const booksClone = this.state.books.map((book) => ({ ...book }));
-    booksClone.find((book) => book.id === bookID).shelf = evt.target.value;
+    booksClone.find((book) => book.id === bookID).shelf = shelf;
     this.setState({ books: booksClone });
+    console.log(bookID, shelf);
+    BooksAPI.update(bookID, shelf).then((data) => console.log(data));
   };
 
   render() {
@@ -71,8 +74,8 @@ class BooksApp extends React.Component {
               <div>
                 {this.state.bookShelves.map((shelf) => (
                   <BookShelves
-                    key={shelf.id}
-                    shelf={shelf.shelf}
+                    key={shelf.shelfKey}
+                    shelf={shelf}
                     books={this.state.books}
                     onSelectChange={this.handleSelectChange}
                   />
