@@ -2,6 +2,7 @@ import React from "react";
 
 const Book = (props) => {
   const { id, imageLinks, title, authors, shelf } = props.book;
+
   return (
     <li>
       <div className="book">
@@ -11,7 +12,7 @@ const Book = (props) => {
             style={{
               width: 128,
               height: 193,
-              backgroundImage: `url(${imageLinks.smallThumbnail})`,
+              backgroundImage: `url(${imageLinks?.smallThumbnail})`,
             }}
           ></div>
           <div className="book-shelf-changer">
