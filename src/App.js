@@ -2,7 +2,7 @@ import React from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import BookShelves from "./components/Book/BookShelves";
 import BooksSearch from "./components/Book/BooksSearch";
-import * as BooksAPI from "./components/Book/BooksAPI";
+import * as BooksAPI from "./api/BooksAPI";
 import "./App.css";
 
 class BooksApp extends React.Component {
