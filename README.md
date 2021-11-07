@@ -1,6 +1,6 @@
 # MyReads-Book-App
 
-A Book Management React-based App provided by Egypt-FWD / Udacity, created using create-react-app.
+A Book Management React-based App provided by Egypt-FWD / Udacity, Created using create-react-app.
 
 ## Features
 
