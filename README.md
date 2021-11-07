@@ -1,14 +1,33 @@
 # MyReads-Book-App
 
-## A Book Management App
-
-A React-based App provided by Egypt-FWD / Udacity.
+A Book Management React-based App provided by Egypt-FWD / Udacity, created using create-react-app.
 
 ## Features
 
 - Organize books into three categories (currently reading, want to read or read).
-- Search for books and add them to the app.
+- Search for books based on title and author
+- Searched books can be added to the app.
 - Dynamic routing using React Router DOM.
+
+## Installation
+
+```
+$ git clone https://github.com/Mohammed-Mounir/MyReads-Book-App.git
+$ cd MyReads-Book-App
+$ npm install
+```
+
+## Usage/Run
+
+```
+$ npm start
+```
+
+or
+
+```
+$ yarn start
+```
 
 ## Tech
 
