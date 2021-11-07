@@ -71,9 +71,20 @@ class BooksApp extends React.Component {
     // If the query exists retrieve it and set the state, else restore the initial state
     if (query) {
       BooksAPI.search(query)
-        .then((result) => {
-          // Checking if the result is an array before setting the state
-          Array.isArray(result) && this.setState({ booksSearchResult: result });
+        .then((searchResult) => {
+          // Checking if the search result is an array before setting the state
+          if (Array.isArray(searchResult)) {
+            searchResult.forEach(
+              (book) =>
+                (book.shelf =
+                  this.state.books.filter(
+                    (storedBook) => storedBook.id === book.id
+                  )[0]?.shelf || "none")
+            );
+            this.setState({ booksSearchResult: searchResult });
+          } else {
+            console.log("No search result");
+          }
         })
         .catch((err) => console.log(err));
     } else {
