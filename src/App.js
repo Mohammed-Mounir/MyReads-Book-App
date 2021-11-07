@@ -16,15 +16,12 @@ class BooksApp extends React.Component {
     booksSearchResult: [],
   };
 
-  componentDidMount() {
-    BooksAPI.getAll().then((books) => {
-      this.setState(() => ({
-        books,
-      }));
-    });
+  async componentDidMount() {
+    const books = await BooksAPI.getAll();
+    this.setState({ books });
   }
 
-  handleSelectChange = (evt, bookId) => {
+  handleSelectChange = async (evt, bookId) => {
     const shelf = evt.target.value;
     const found = this.state.books.some((book) => book.id === bookId);
 
@@ -46,50 +43,55 @@ class BooksApp extends React.Component {
       // Updating
       this.updateSaveBook(book, shelf, booksCopy);
     } else {
-      BooksAPI.get(bookId).then((book) => {
+      try {
+        const book = await BooksAPI.get(bookId);
         book.shelf = shelf;
         // Saving
         this.updateSaveBook(book, shelf);
         this.setState((prevState) => ({ books: [...prevState.books, book] }));
-      });
+      } catch (err) {
+        console.error(err);
+      }
     }
   };
 
-  updateSaveBook = (book, shelf, books = []) => {
-    BooksAPI.update(book, shelf)
-      .then((res) => console.log("Updated Successfully!", res))
-      .catch((err) => {
-        console.log("Couldn't Update!", err);
-        // Rolling back changes
-        this.setState({ books: books });
-      });
+  updateSaveBook = async (book, shelf, books = []) => {
+    try {
+      await BooksAPI.update(book, shelf);
+    } catch (err) {
+      console.error(err);
+      // Rolling back changes
+      this.setState({ books });
+    }
   };
 
-  handleSearch = (evt) => {
+  handleSearch = async (evt) => {
     const query = evt.target.value;
 
-    // If the query exists retrieve it and set the state, else restore the initial state
-    if (query) {
-      BooksAPI.search(query)
-        .then((searchResult) => {
-          // Checking if the search result is an array before setting the state
-          if (Array.isArray(searchResult)) {
-            searchResult.forEach(
-              (book) =>
-                (book.shelf =
-                  this.state.books.filter(
-                    (storedBook) => storedBook.id === book.id
-                  )[0]?.shelf || "none")
-            );
-            this.setState({ booksSearchResult: searchResult });
-          } else {
-            console.log("No search result");
-            this.setState({ booksSearchResult: [] });
-          }
-        })
-        .catch((err) => console.log(err));
-    } else {
-      this.setState({ booksSearchResult: [] });
+    try {
+      // If the query exists retrieve it and set the state, else restore the initial state
+      if (query) {
+        const searchResult = await BooksAPI.search(query);
+
+        // Checking if the search result is an array before setting the state
+        if (Array.isArray(searchResult)) {
+          searchResult.forEach(
+            (book) =>
+              (book.shelf =
+                this.state.books.filter(
+                  (storedBook) => storedBook.id === book.id
+                )[0]?.shelf || "none")
+          );
+          this.setState({ booksSearchResult: searchResult });
+        } else {
+          console.log("No search result");
+          this.setState({ booksSearchResult: [] });
+        }
+      } else {
+        this.setState({ booksSearchResult: [] });
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 
