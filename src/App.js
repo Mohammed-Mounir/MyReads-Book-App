@@ -40,7 +40,7 @@ class BooksApp extends React.Component {
       const book = booksClone.find((book) => book.id === bookId);
       book.shelf = shelf;
 
-      // Setting the state before calling API for faster updated UI
+      // Setting the state before calling API for better UI responsive
       this.setState({ books: booksClone });
 
       // Updating
@@ -103,6 +103,7 @@ class BooksApp extends React.Component {
                 onSearch={this.handleSearch}
                 books={this.state.booksSearchResult}
                 onSelectChange={this.handleSelectChange}
+                onExit={() => this.setState({ booksSearchResult: [] })}
               />
             }
           />
