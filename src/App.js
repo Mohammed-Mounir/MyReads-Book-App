@@ -84,6 +84,7 @@ class BooksApp extends React.Component {
             this.setState({ booksSearchResult: searchResult });
           } else {
             console.log("No search result");
+            this.setState({ booksSearchResult: [] });
           }
         })
         .catch((err) => console.log(err));
